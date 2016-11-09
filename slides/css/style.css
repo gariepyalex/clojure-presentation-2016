@@ -1,3 +1,66 @@
+.deck-container {
+    background: #fafafa;
+    font-size: 1.25em;
+    font-family: Georgia, Times, "Times New Roman", serif;
+    -webkit-font-smoothing: antialiased; /* Fix for webkit rendering */
+    -webkit-text-size-adjust: 100%;
+}
+
+.slide {
+    background: #fafafa;
+    margin: 40px;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-weight: normal;
+    line-height: 1;
+}
+h1 {
+    text-transform: uppercase;
+    font-size: 3.5em;
+    font-weight: bold;
+    border-bottom: 5px #000 solid;
+    margin: 0 0 70px 0;
+}
+h2 {
+    margin: 35px 0 25px 0;
+    font-size: 2em;
+    font-style: italic;
+}
+h3 {
+    margin: 30 0 20px 0;
+    font-size: 1.3em;
+}
+ul > li > h3 {
+    margin: 0 0 20px 0;
+}
+h4 {
+    font-variant: small-caps;
+}
+
 pre {
     max-width: 80%;
+}
+
+#first-slide img {
+    width: 300px;
+    height: 300px;
+}
+
+#memento-slide img {
+    margin-left: 200px;
+}
+
+#benchmark-slide img {
+    width: 1000px;
+}
+
+.quote {
+    max-width: 700px;
+    font-style: italic;
 }

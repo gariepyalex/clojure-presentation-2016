@@ -12,7 +12,7 @@
 
   <!-- Required stylesheet -->
   <link rel="stylesheet" media="screen" href="core/deck.core.css">
-  <link rel="stylesheet" type="text/css" href="css/mnml.css">
+  <!-- <link rel="stylesheet" type="text/css" href="css/mnml.css"> -->
 
   <!-- Extension CSS files go here. Remove or add as needed. -->
   <link rel="stylesheet" media="screen" href="extensions/goto/deck.goto.css">
@@ -34,34 +34,372 @@
   <div class="deck-container">
 
     <!-- Begin slides. Just make elements with a class of slide. -->
+    <section id="first-slide" class="slide">
+        <h1>Clojure</h1>
+        <h2>Programmation fonctionnelle pragmatique</h2>
+        <img src="img/clojure-logo.png"/>
+    </section>
 
     <section class="slide">
-        <h1>Code slide</h1>
+        <h1>Plan</h1>
+        <ul>
+            <li><h3>Pourquoi Clojure?</h3></li>
+            <li><h3>Syntaxe</h3></li>
+            <li><h3>Programmation fonctionnelle</h3></li>
+            <li><h3>Concurrence</h3></li>
+        </ul>
+    </section>
 
-        <h3>Some Clojure code</h3>
+
+    <section class="slide">
+        <h1>Qu'est-ce que Clojure?</h1>
+        <h3>Dialecte de Lisp</h3>
+        <h3>Langage fonctionnel</h3>
+        <h3>Accent sur l'immutabilité et la concurrence</h3>
+        <h3>Pragmatique</h3>
+    </section>
+
+    <section class="slide">
+        <h1>Fill the blank</h1>
+        <p class="quote">
+            "A lot of the best programmers and the most productive programmers I know are writing everything in _____ and swearing by it, and then just producing ridiculously sophisticated things in a very short time. And that programmer productivity matters."
+        </p>
+        <p>-Adrian Cockcroft, Netflix</p>
+    </section>
+
+
+    <section class="slide">
+        <h1>Pourquoi Clojure?</h1>
+        <a>http://blog.cognitect.com/blog/2015/6/30/walmart-runs-clojure-at-scale</a>
+        <p class="quote"><i>"How did Walmart's eReceipts team of 8 developers build a system to process and integrate every purchase at Walmart's 5000+ stores, including online and mobile data? Simple - they used Clojure"</i></p>
+
+        <p class="quote"><i>"Clojure uses anywhere from 5 to 10 times less code than other programming languages, speeding development time, reducing the instances of bugs, and lowering maintenance costs."</i></p>
+    </section>
+
+    <section id="benchmark-slide" class="slide">
+        <h1>Pourquoi Clojure?</h1>
+        <h3>Benchmark websocket- nombre de connections concurrentes</h3>
+        <img src="img/benchmark.png"/>
+    </section>
+
+    <section class="slide">
+        <h1>Types atomiques</h1>
+
         <pre>
           <code class="language-klipse">
-            (let [a 3]
-              (+ 1 2 a))
+; Nombres
+1
+1.3
+1.234M
+22/7
+
+; String, char
+"toto"
+\c
+
+; Symbol, keyword
+map
++
+:toto
+
+; Boolean
+true
+false
+
+; Null
+nil
+
+;Regex
+#"a*b"
           </code>
         </pre>
+    </section>
 
-        <h3>Some JS code</h3>
+    <section class="slide">
+        <h1>Structures de données</h1>
         <pre>
-          <code class="language-klipse-eval-js">
-              let a = 3;
-              1 + 2 + a;
+          <code class="language-klipse">
+; Liste
+'(1 2 3 4 5)
+
+; Vecteur
+[1 2 3 4 5]
+
+; Map
+{:a 5, :b 3}
+{:a 5  :b 3}
+
+; Set
+#{1 2 3 4 5}
+
+; On peut tout "nester"
+{:some-set #{1 2 3}
+
+ :some-map {:a 23
+            :b 21}
+
+ :some-vec [4 3 23]}
+          </code>
+        </pre>
+    </section>
+
+    <section class="slide">
+        <h1>Syntaxe</h1>
+        <h2>On vient de la voir</h2>
+        <h2>LISP == LISt Processing</h2>
+        <h2>Notation préfixe: <code>(func arg1 arg2 arg3...)</code></h2>
+    </section>
+
+
+    <section class="slide">
+        <h1>Évaluation de listes</h1>
+        <pre>
+          <code class="language-klipse">
+(+ 1 2 3 4)
+          </code>
+        </pre>
+        <pre>
+          <code class="language-klipse">
+(type '+)
           </code>
         </pre>
 
+        <pre>
+          <code class="language-klipse">
+(+ (* 3 5) (- 10 3))
+          </code>
+        </pre>
+    </section>
+
+
+    <section class="slide">
+        <h1>Immutabilité</h1>
+        <h3>Structures de données VanillaJS</h3>
+        <pre>
+            <code class="language-klipse-eval-js">
+var evil_do_sum = function(some_array) {
+    var sum = 0;
+    for(var i = 0; i < some_array.length; i++) {
+        sum += some_array[i];
+        console.log(i)
+        some_array[i] = 0;
+    }
+    return sum;
+};
+
+var a = [1, 2, 3, 4, 5];
+var sum = evil_do_sum(a);
+
+"La somme de " + a + " est " + sum;
+          </code>
+        </pre>
+
+        <h3>Imaginez du code non trivial (ex. transaction BD). On doit tout encapsuler.</h3>
+    </section>
+
+    <section id="memento-slide" class="slide">
+      <h1>Memento</h1>
+      <img src="https://media.licdn.com/mpr/mpr/p/7/005/08d/2c9/372d15a.jpg"/>
+    </section>
+
+
+    <section class="slide">
+        <h1>Immutabilité</h1>
+        <pre>
+            <code class="language-klipse">
+(def a {:info  "confidential"
+        :jokes "not allowed"})
+
+
+(def do-stuff
+  (fn [arg]
+    (assoc arg :your-mom "LOL")))
+
+
+(defn do-stuff-2
+  []
+  (assoc a :your-mom "LOL"))
+
+
+(let [foo (do-stuff a)
+      bar (do-stuff-2)]
+  [foo bar a])
+            </code>
+        </pre>
+        <h3>a n'est jamais modifié</h3>
+    </section>
+
+
+    <section class="slide">
+      <h1>Fonction pure</h1>
+      <h3>N'interagit pas avec le monde extérieur</h3>
+      <h3>Entrée -> Sortie</h3>
+      <h3>Toujours le même résultat pour une même entrée</h3>
+      <h3>Facile à tester (sans Mocks!)</h3>
+    </section>
+
+
+    <section id="higher-order" class="slide">
+      <h1>Fonction d'ordre supérieur</h1>
+      <h3>Prend en entrée une fonction</h3>
+      <img src="https://upload.wikimedia.org/wikipedia/it/b/b8/CommandPattern.png"/>
+    </section>
+
+    <section id="higher-order" class="slide">
+      <h1>Fonction d'ordre supérieur</h1>
+      <h3>Prend en entrée une fonction</h3>
+      <pre>
+          <code class="language-klipse">
+(map (fn [a] (inc a))
+     [1 2 3])
+          </code>
+      </pre>
+      <pre>
+          <code class="language-klipse">
+(filter (fn [x] (= x 2))
+        [1 2 3 2 1 1 2 2])
+          </code>
+      </pre>
+      <pre>
+          <code class="language-klipse">
+(reduce (fn [sum x] (+ sum x))
+        0
+        [1 2 3 4 5 6])
+          </code>
+      </pre>
     </section>
 
     <section class="slide">
-      <h1>Content</h1>
+        <h1>Exemple</h1>
+        <h3>Transformation de données</h3>
+        <p>Sélectionner les utilisateurs qui ont une adresse gmail</p>
+        <p>Incrémenter leur karma de 100</p>
+        <p>Mettre leur nom en majuscule</p>
+        <p>Retourner uniquement les noms et leur karma</p>
     </section>
 
     <section class="slide">
-      <h1>Here</h1>
+        <h1>Exemple</h1>
+        <pre>
+            <code class="language-klipse">
+(require '[clojure.string :as s])
+
+(def users [{:name "toTo"
+             :email "toto@gmail.com"
+             :karma 23}
+            {:name "tata"
+             :email "tata@yahoo.com"
+             :karma 12}
+            {:name "foO"
+             :email "foo@gmail.com"
+             :karma 42}])
+
+(defn is-gmail?
+  [email]
+  (re-matches #".*@gmail\.com" email))
+
+(defn increment-karma
+  [karma]
+  (+ karma 100))
+
+(->> users
+     (filter #(is-gmail? (:email %)))
+     (map #(update % :karma increment-karma))
+     (map #(update % :name s/upper-case))
+     (mapv #(select-keys % [:name :karma])))
+            </code>
+        </pre>
+    </section>
+
+    <section class="slide">
+        <h1>Interlude - Macro</h1>
+        <h3>Rappel - LISt Processing, code as data</h3>
+        <h3>Macro: code qui modifie une <b>liste</b> de code avant l'évaluation</h3>
+        <h4>(Pas au niveau du fichier texte)</h4>
+        <h3>But: Métaprogrammation, améliorer la lisibilité</h3>
+        <pre>
+            <code class="language-klipse">
+(->> [1 2 3 4 5]
+     (map inc)
+     (filter odd?)
+     (reduce +))
+            </code>
+        </pre>
+        <pre>
+            <code class="language-klipse">
+(macroexpand '(->> [1 2 3 4 5]
+                   (map inc)
+                   (filter odd?)
+                   (reduce +)))
+            </code>
+        </pre>
+    </section>
+
+    <section class="slide">
+        <h1>Concurrence</h1>
+        <h3>Fonctions pures -> pas d'effet de bord -> parralellisable</h3>
+        <h3>Pas d'effet de bord -> programme qui ne fait rien :(</h3>
+        <h3>Comment gérer l'état du système?</h3>
+        <ul>
+            <li><h3>STM - Software Transactional Memory</h3></li>
+            <li><h3>core.async - modèle de concurrence <i>à la Go</i></h3></li>
+        </ul>
+    </section>
+
+
+    <section class="slide">
+        <h1>STM</h1>
+        <h3>Gérer la mutation comme une transaction atomique</h3>
+        <h3>Pas de locks</h3>
+        <pre>
+            <code class="language-klipse">
+(def state (atom []))
+
+; Thread 1
+(swap! state conj {:a 1, :b 3})
+; Thread 2
+(swap! state conj {:c 2, :d 4})
+
+(deref state) ; deref retourne une valeur immuable
+            </code>
+        </pre>
+    </section>
+
+
+    <section class="slide">
+        <h1>core.async</h1>
+        <h3>Programmation async par channels</h3>
+        <pre>
+            <code class="language-klipse">
+(defn producer
+  [out-chan]
+  (go
+    (loop [seconds 1]
+      (&lt;! (timeout 1000))
+      (print "waited" seconds "seconds")
+      (&gt;! out-chan seconds)
+      (recur (inc seconds)))))
+
+; Ailleurs dans le systême
+(defn consumer
+  []
+  (let [com-channel     (chan)
+        producer-closed (producer com-channel)]
+    (go
+      (loop [state {:time 0}]
+
+        ; "Parking" du thread, attente d'un message
+        (let [new-state (&lt;! com-channel)]
+
+          ; Récursion avec le nouvel état
+          (recur new-state))))))
+            </code>
+        </pre>
+    </section>
+
+    <section class="slide">
+        <h1>Pour en savoir plus</h1>
+        <img src="http://www.braveclojure.com/assets/images/home/book-cover.png"/>
     </section>
 
     <!-- End slides. -->
